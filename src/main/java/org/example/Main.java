@@ -1,42 +1,54 @@
 package org.example;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.stream.IntStream;
 
 public class Main {
     public static void main(String[] args) {
-        int[] arr = new int[20];
-        Random random = new Random();
-        for (int i = 0; i < arr.length; i++) {
-            arr[i] = random.nextInt(15) + 1;
-        }
-        System.out.println(Arrays.toString(arr));
-        Arrays.sort(arr);
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Введите строку");
+        String line = scanner.nextLine();
+        System.out.println("Введите подстроку");
+        String subLine = scanner.nextLine();
+        countSubstring(line, subLine);
 
-        Map<Integer, Integer> map = new HashMap<>();
-        int count = 1;
-        for (int i = 1; i < arr.length; i++) {
-            if (arr[i - 1] == arr[i]) {
+        System.out.println("Введите строку");
+        String newLine = scanner.nextLine();
+        replaceLine(newLine);
+
+        System.out.println("Введите дату в формате 'дд.мм.гггг'");
+        String dateLine = scanner.nextLine();
+        reformDate(dateLine);
+    }
+    
+    public static void countSubstring(String line, String subLine) {
+        int count = 0;
+        for (int i = 0; i < line.length(); i ++) {
+            int subIndex = i + subLine.length();
+            if (subIndex <= line.length() && line.substring(i, subIndex).equals(subLine)) {
                 count++;
             }
-            else {
-                if (count > 1) {
-                    map.put(arr[i - 1], count);
-                }
-                count = 1;
-            }
         }
+        System.out.printf("Подстрока %s встречается %d раза\n", subLine, count);
+    }
 
-        if (count > 1) {
-            map.put(arr[arr.length - 1], count);
-        }
+    public static void replaceLine(String line) {
+        String replacer = "вырезано цензурой";
+        String newLine = line.replace("кака", replacer);
+        newLine = newLine.replace("бяка", replacer);
+        System.out.println(newLine);
+    }
 
-        if (!map.isEmpty()) {
-            for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
-                System.out.printf("Число '%d' встречается %d раза\n", entry.getKey(), entry.getValue());
-            }
+    public static void reformDate(String line) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
+        SimpleDateFormat newFormat = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            Date date = simpleDateFormat.parse(line);
+            System.out.println(newFormat.format(date));
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
     }
 }
