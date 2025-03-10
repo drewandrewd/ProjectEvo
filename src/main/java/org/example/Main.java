@@ -26,6 +26,7 @@ public class Main {
         int age = Integer.parseInt(scanner.nextLine());
         if (map.containsKey(age)) {
             List<User> users = map.get(age);
+            users.sort(Comparator.comparing(User::getName));
             users.stream().forEach(curr -> System.out.println(curr));
         } else {
             System.out.printf("Пользователь с возрастом '%d' не найден", age);
